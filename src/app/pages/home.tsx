@@ -14,12 +14,55 @@ const bannerClass =
 
 export const Home = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-8">
-        <SignUpForm />
-        <SignInForm />
+    <main className="min-h-screen bg-gray-100 p-6">
+      <header className="bg-gray-50 flex-col items-center justify-center p-6">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          Redwood SDK with Better-Auth on Cloudflare with D1
+        </h1>
+        <h2 className="text-2xl font-semibold text-gray-600 mb-4">
+          A demo of RedwoodSDK's auth integration with Better-Auth, using
+          Cloudflare D1 as the database. Try signing up and signing in.
+        </h2>
+        <ul>
+          <li>
+            <a
+              href="https://rwsdk.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              RedwoodSDK: A simple framework for humans
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://better-auth.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              Better-Auth: The most comprehensive authentication framework.
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.cloudflare.com/developer-platform/products/d1/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              Cloudflare D1: Create serverless SQL databases
+            </a>
+          </li>
+        </ul>
+      </header>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+        <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-8">
+          <SignUpForm />
+          <SignInForm />
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 
@@ -32,7 +75,11 @@ const SignUpForm = () => {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const clearFieldError = (field: string) =>
-    setFieldErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,47 +102,68 @@ const SignUpForm = () => {
 
   return (
     <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Create an account</h2>
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+        Create an account
+      </h2>
       {banner && <p className={bannerClass}>{banner}</p>}
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <div>
-          <label htmlFor="signup-name" className={labelClass}>Name</label>
+          <label htmlFor="signup-name" className={labelClass}>
+            Name
+          </label>
           <input
             id="signup-name"
             type="text"
             required
             autoComplete="name"
             value={name}
-            onChange={(e) => { setName(e.target.value); clearFieldError("name"); }}
+            onChange={(e) => {
+              setName(e.target.value);
+              clearFieldError("name");
+            }}
             className={inputClass}
           />
           {fieldErrors.name && <p className={errorClass}>{fieldErrors.name}</p>}
         </div>
         <div>
-          <label htmlFor="signup-email" className={labelClass}>Email</label>
+          <label htmlFor="signup-email" className={labelClass}>
+            Email
+          </label>
           <input
             id="signup-email"
             type="email"
             required
             autoComplete="email"
             value={email}
-            onChange={(e) => { setEmail(e.target.value); clearFieldError("email"); }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              clearFieldError("email");
+            }}
             className={inputClass}
           />
-          {fieldErrors.email && <p className={errorClass}>{fieldErrors.email}</p>}
+          {fieldErrors.email && (
+            <p className={errorClass}>{fieldErrors.email}</p>
+          )}
         </div>
         <div>
-          <label htmlFor="signup-password" className={labelClass}>Password</label>
+          <label htmlFor="signup-password" className={labelClass}>
+            Password
+          </label>
           <input
             id="signup-password"
             type="password"
             required
             autoComplete="new-password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); clearFieldError("password"); }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              clearFieldError("password");
+            }}
             className={inputClass}
           />
-          {fieldErrors.password && <p className={errorClass}>{fieldErrors.password}</p>}
+          {fieldErrors.password && (
+            <p className={errorClass}>{fieldErrors.password}</p>
+          )}
         </div>
         <button
           type="submit"
@@ -117,7 +185,11 @@ const SignInForm = () => {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const clearFieldError = (field: string) =>
-    setFieldErrors((prev) => { const next = { ...prev }; delete next[field]; return next; });
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,30 +216,44 @@ const SignInForm = () => {
       {banner && <p className={bannerClass}>{banner}</p>}
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <div>
-          <label htmlFor="signin-email" className={labelClass}>Email</label>
+          <label htmlFor="signin-email" className={labelClass}>
+            Email
+          </label>
           <input
             id="signin-email"
             type="email"
             required
             autoComplete="email"
             value={email}
-            onChange={(e) => { setEmail(e.target.value); clearFieldError("email"); }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              clearFieldError("email");
+            }}
             className={inputClass}
           />
-          {fieldErrors.email && <p className={errorClass}>{fieldErrors.email}</p>}
+          {fieldErrors.email && (
+            <p className={errorClass}>{fieldErrors.email}</p>
+          )}
         </div>
         <div>
-          <label htmlFor="signin-password" className={labelClass}>Password</label>
+          <label htmlFor="signin-password" className={labelClass}>
+            Password
+          </label>
           <input
             id="signin-password"
             type="password"
             required
             autoComplete="current-password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); clearFieldError("password"); }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              clearFieldError("password");
+            }}
             className={inputClass}
           />
-          {fieldErrors.password && <p className={errorClass}>{fieldErrors.password}</p>}
+          {fieldErrors.password && (
+            <p className={errorClass}>{fieldErrors.password}</p>
+          )}
         </div>
         <button
           type="submit"
