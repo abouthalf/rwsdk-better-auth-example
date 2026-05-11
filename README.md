@@ -2,6 +2,8 @@
 
 A working example of a [Redwood SDK](https://docs.rwsdk.com/) app with [Better Auth](https://better-auth.com/) for authentication, backed by [Cloudflare D1](https://developers.cloudflare.com/d1/) via [Kysely](https://kysely.dev/).
 
+Live example: [https://rwsdk-better-auth-example.mb-b04.workers.dev/](https://rwsdk-better-auth-example.mb-b04.workers.dev/)
+
 ## Stack
 
 - **Redwood SDK** — React RSC + Server Actions on Cloudflare Workers
