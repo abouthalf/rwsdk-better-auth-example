@@ -56,7 +56,7 @@ export const Home = () => {
           </li>
         </ul>
       </header>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+      <div className="bg-gray-50 flex items-center justify-center p-6">
         <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-8">
           <SignUpForm />
           <SignInForm />
