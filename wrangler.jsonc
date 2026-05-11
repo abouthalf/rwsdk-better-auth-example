@@ -14,12 +14,12 @@
 
   // Assets configuration
   "assets": {
-    "binding": "ASSETS"
+    "binding": "ASSETS",
   },
 
   // Observability settings
   "observability": {
-    "enabled": true
+    "enabled": true,
   },
 
   // D1 database binding
@@ -27,12 +27,12 @@
     {
       "binding": "DB",
       "database_name": "rwsdk-better-auth-example",
-      "database_id": "27c18dd3-2304-4264-b4b2-fac47af8ac07"
-    }
+      "database_id": "27c18dd3-2304-4264-b4b2-fac47af8ac07",
+    },
   ],
 
   // Environment variables
   "vars": {
-    "BETTER_AUTH_URL": "http://localhost:5173"
-  }
+    "BETTER_AUTH_URL": "https://rwsdk-better-auth-example.mb-b04.workers.dev",
+  },
 }
