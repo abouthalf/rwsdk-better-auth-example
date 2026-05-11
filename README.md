@@ -107,6 +107,55 @@ curl -X POST http://localhost:5173/api/auth/sign-out \
   -H "Cookie: <session-cookie-from-sign-in>"
 ```
 
+## Deployment
+
+### 1. Initial deploy
+
+```bash
+pnpm release
+```
+
+At the end of the output, Wrangler prints your workers.dev URL:
+`https://rwsdk-better-auth-example.<your-account>.workers.dev`
+
+Copy it — you need it in the next step.
+
+### 2. Update `BETTER_AUTH_URL` in `wrangler.jsonc`
+
+Replace the localhost placeholder with your production URL:
+
+```jsonc
+"vars": {
+  "BETTER_AUTH_URL": "https://rwsdk-better-auth-example.<your-account>.workers.dev"
+}
+```
+
+> **Local dev is unaffected.** Wrangler gives `.dev.vars` (symlinked from `.env`) precedence over `vars` during `pnpm dev`, so `http://localhost:5173` continues to be used locally.
+
+### 3. Set the auth secret
+
+```bash
+pnpm wrangler secret put BETTER_AUTH_SECRET
+```
+
+Paste the same value from your `.env` file when prompted (or generate a fresh one with `openssl rand -base64 32`).
+
+### 4. Apply the migration to production D1
+
+```bash
+pnpm wrangler d1 execute rwsdk-better-auth-example --remote --file=./migrations/001_better_auth.sql
+```
+
+The D1 database already exists (its `database_id` is set in `wrangler.jsonc`) — this just initialises the schema.
+
+### 5. Redeploy
+
+```bash
+pnpm release
+```
+
+This picks up the updated `BETTER_AUTH_URL` from `wrangler.jsonc`. Auth is now fully functional in production.
+
 ## Password requirements
 
 Better Auth's email/password provider accepts a `password` config object in `emailAndPassword`. To enforce stricter requirements in a production app, pass a custom validator:
@@ -142,6 +191,42 @@ migrations/
   001_better_auth.sql  # Better Auth schema (user, session, account, verification)
 specs/              # Spec-driven development documents
 ```
+
+## Make it your own
+
+This is a reference implementation — here's what to change when adapting it for a real project.
+
+### Worker and database name
+
+The name `rwsdk-better-auth-example` appears in three places. Change all three to match your project:
+
+- `wrangler.jsonc` → `"name"` (the Worker name shown in the Cloudflare dashboard)
+- `wrangler.jsonc` → `d1_databases[0].database_name`
+- Any `pnpm wrangler d1 execute rwsdk-better-auth-example ...` commands in your workflow
+
+After renaming, run `pnpm wrangler d1 create <your-name>` to provision a new database and paste the resulting `database_id` into `wrangler.jsonc`.
+
+### `BETTER_AUTH_URL`
+
+Update the `vars` entry in `wrangler.jsonc` to your production Workers URL once you have it. For local dev this is always overridden by `.env` via the `.dev.vars` symlink.
+
+### `BETTER_AUTH_SECRET`
+
+Generate a unique secret per environment:
+
+```bash
+openssl rand -base64 32
+```
+
+Store it in `.env` for local dev and as a Wrangler secret for production (`pnpm wrangler secret put BETTER_AUTH_SECRET`). Never reuse the same secret across environments.
+
+### Auth providers
+
+Only email/password is enabled in `src/lib/auth.ts`. Better Auth supports social providers (Google, GitHub, etc.) and plugins (2FA, magic links, passkeys). See the [Better Auth docs](https://better-auth.com/docs/introduction) to add them — each provider typically requires additional `d1_databases` migration columns or a new migration file.
+
+### Password requirements
+
+See the [Password requirements](#password-requirements) section above.
 
 ## Further reading
 
