@@ -15,9 +15,32 @@ export default defineApp([
   prefix("/api/auth", [
     route("/*", ({ request }) => auth.handler(request)),
   ]),
+  route("/logout", async ({ request }) => {
+    await auth.api.signOut({ headers: request.headers });
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/" },
+    });
+  }),
   render(Document, [
     route("/", Home),
-    route("/app", AppPage),
-    route("/profile", ProfilePage),
+    route("/app", [
+      async ({ request }) => {
+        const session = await auth.api.getSession({ headers: request.headers });
+        if (!session) {
+          return new Response(null, { status: 302, headers: { Location: "/" } });
+        }
+      },
+      AppPage,
+    ]),
+    route("/profile", [
+      async ({ request }) => {
+        const session = await auth.api.getSession({ headers: request.headers });
+        if (!session) {
+          return new Response(null, { status: 302, headers: { Location: "/" } });
+        }
+      },
+      ProfilePage,
+    ]),
   ]),
 ]);

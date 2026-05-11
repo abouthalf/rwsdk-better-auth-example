@@ -107,6 +107,27 @@ curl -X POST http://localhost:5173/api/auth/sign-out \
   -H "Cookie: <session-cookie-from-sign-in>"
 ```
 
+## Password requirements
+
+Better Auth's email/password provider accepts a `password` config object in `emailAndPassword`. To enforce stricter requirements in a production app, pass a custom validator:
+
+```ts
+emailAndPassword: {
+  enabled: true,
+  password: {
+    minLength: 12,
+    validate(password) {
+      if (!/[A-Z]/.test(password)) return false; // require uppercase
+      if (!/[0-9]/.test(password)) return false;  // require digit
+      if (!/[^A-Za-z0-9]/.test(password)) return false; // require special char
+      return true;
+    },
+  },
+},
+```
+
+See [Better Auth — Email & Password options](https://better-auth.com/docs/authentication/email-password) for the full configuration reference.
+
 ## Project structure
 
 ```
