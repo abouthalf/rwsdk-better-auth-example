@@ -34,13 +34,19 @@ pnpm deploy       # deploy to Cloudflare
 pnpm generate     # sync Wrangler bindings → TypeScript types
 ```
 
-For D1 / Better Auth migrations:
+For D1 migrations:
 ```bash
-npx @better-auth/cli generate   # generate SQL migration from Better Auth schema
-npx @better-auth/cli migrate    # apply migrations (Kysely adapter)
-wrangler d1 execute DB --local --file=./migration.sql   # apply to local D1
-wrangler d1 execute DB --file=./migration.sql           # apply to remote D1
+# Apply to local D1 (used by pnpm dev)
+pnpm wrangler d1 execute rwsdk-better-auth-example --local --file=./migrations/<file>.sql
+
+# Apply to production D1
+pnpm wrangler d1 execute rwsdk-better-auth-example --remote --file=./migrations/<file>.sql
+
+# After changing wrangler.jsonc bindings
+pnpm generate
 ```
+
+> **Note on Better Auth CLI (`npx auth@latest generate/migrate`):** These commands require loading and instantiating your auth config, which needs a real database connection. Since D1 only exists as a Cloudflare Workers binding (not available in Node.js), the CLI cannot connect to it. Migration SQL is written manually under `migrations/` based on Better Auth's field definitions in `@better-auth/core/dist/db/get-tables.mjs`. When adding Better Auth plugins, inspect that file to see any new tables the plugin adds, and write a new numbered migration accordingly.
 
 ## Architecture
 
